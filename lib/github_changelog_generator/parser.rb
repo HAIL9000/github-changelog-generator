@@ -72,6 +72,9 @@ module GitHubChangelogGenerator
         opts.on("--enhancement-label [LABEL]", "Setup custom label for enhancements section. Default is \"**Implemented enhancements:**\"") do |v|
           options[:enhancement_prefix] = v
         end
+        opts.on("--breaking-label [LABEL]", "Setup custom label for the breaking changes section. Default is \"**Breaking changes:**\"") do |v|
+          options[:breaking_prefix] = v
+        end
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
@@ -128,6 +131,9 @@ module GitHubChangelogGenerator
         end
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
+        end
+        opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking Changes". Default is \'backwards-incompatible\'') do |list|
+          options[:breaking_labels] = list
         end
         opts.on("--issue-line-labels x,y,z", Array, 'The specified labels will be shown in brackets next to each matching issue. Use "ALL" to show all labels. Default is [].') do |list|
           options[:issue_line_labels] = list
@@ -209,6 +215,7 @@ module GitHubChangelogGenerator
         compare_link: true,
         enhancement_labels: %w[enhancement Enhancement],
         bug_labels: %w[bug Bug],
+        breaking_labels: %w[backwards-incompatible breaking],
         exclude_labels: %w[duplicate question invalid wontfix Duplicate Question Invalid Wontfix],
         issue_line_labels: [],
         max_issues: nil,
@@ -220,6 +227,7 @@ module GitHubChangelogGenerator
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
         enhancement_prefix: "**Implemented enhancements:**",
+        breaking_prefix: "**Breaking changes:**",
         git_remote: "origin",
         http_cache: true
       )
