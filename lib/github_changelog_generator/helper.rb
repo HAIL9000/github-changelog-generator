@@ -17,6 +17,7 @@ module GitHubChangelogGenerator
                Logger.new(STDOUT)
              end
     @log.formatter = proc do |severity, _datetime, _progname, msg|
+      require 'pry'; binding.pry
       string = "#{msg}\n"
       case severity
       when "DEBUG" then Rainbow(string).magenta

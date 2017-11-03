@@ -6,6 +6,8 @@ require "github_changelog_generator/generator/generator_fetcher"
 require "github_changelog_generator/generator/generator_processor"
 require "github_changelog_generator/generator/generator_tags"
 
+require 'pp'
+
 module GitHubChangelogGenerator
   # Default error for ChangelogGenerator
   class ChangelogGeneratorError < StandardError
@@ -95,6 +97,7 @@ module GitHubChangelogGenerator
     # @param [Array] pull_requests
     # @return [String] generated log for issues
     def issues_to_log(issues, pull_requests)
+      require 'pry'; binding.pry
       sections = parse_by_sections(issues, pull_requests)
 
       log = ""
@@ -102,6 +105,8 @@ module GitHubChangelogGenerator
       log += generate_sub_section(sections[:enhancements], options[:enhancement_prefix])
       log += generate_sub_section(sections[:bugs], options[:bug_prefix])
       log += generate_sub_section(sections[:issues], options[:issue_prefix])
+      log += generate_sub_section('cats', 'cats')
+      log += generate_sub_section('dogs', 'dogs')
       log
     end
 
@@ -116,7 +121,9 @@ module GitHubChangelogGenerator
         issues: [],
         enhancements: [],
         bugs: [],
-        breaking: []
+        breaking: [],
+        cats: [],
+        dogs: []
       }
 
       issues.each do |dict|
@@ -139,7 +146,6 @@ module GitHubChangelogGenerator
 
         sections[:issues] << dict unless added
       end
-
       sort_pull_requests(pull_requests, sections)
     end
 
@@ -149,21 +155,17 @@ module GitHubChangelogGenerator
     # @param [Hash] sections
     # @return [Hash] sections
     def sort_pull_requests(pull_requests, sections)
+      require 'pry'; binding.pry
+      map = create_label_to_section_map
+      puts "HERE IS THE MAP HERE IT IS"
+      pp map
       added_pull_requests = []
       pull_requests.each do |pr|
         added = false
 
         pr["labels"].each do |label|
-          if options[:bug_labels].include?(label["name"])
-            sections[:bugs] << pr
-            added_pull_requests << pr
-            added = true
-          elsif options[:enhancement_labels].include?(label["name"])
-            sections[:enhancements] << pr
-            added_pull_requests << pr
-            added = true
-          elsif options[:breaking_labels].include?(label["name"])
-            sections[:breaking] << pr
+          if map[label]
+            sections[map[label]] << pr
             added_pull_requests << pr
             added = true
           end
@@ -173,6 +175,47 @@ module GitHubChangelogGenerator
       end
       added_pull_requests.each { |p| pull_requests.delete(p) }
       sections
+    end
+
+    def create_label_to_section_map
+      require 'pry'; binding.pry
+      #TODO: testing hack, take this out
+      options[:configure_sections] = '{"cats": ["unix", "bigby", "clementine"], "dogs": ["hambone", "digby"]}'
+
+      begin
+        user_sections = JSON.parse(options[:configure_sections])
+      rescue JSON::ParserError
+        raise "heckin' json"
+      end
+
+      label_to_section = { }
+
+      # add the user configured labels to the has map if the user is using
+      # --configure-sections or --add-sections
+      user_sections.each do |section, labels|
+        labels.each do |label|
+          label_to_section[label] = section
+        end
+      end
+
+      # add the default sections if the user is using --add-sections or is
+      # not changing the sections at all
+      return label_to_section unless options[:configure_sections].empty?
+
+      # TODO: don't duplicate all this shit u loser
+      options[:bug_labels].each do |label|
+        label_to_section[label] = "bugs"
+      end
+
+      options[:enhancement_labels].each do |label|
+        label_to_section[label] = "enhancements"
+      end
+
+      options[:breaking_labels].each do |label|
+        label_to_section[label] = "breaking"
+      end
+
+      label_to_section
     end
   end
 end

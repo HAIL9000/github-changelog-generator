@@ -29,6 +29,8 @@ module GitHubChangelogGenerator
       enhancement_prefix
       breaking_labels
       breaking_prefix
+      configure_sections
+      add_sections
       exclude_labels
       exclude_tags
       exclude_tags_regex

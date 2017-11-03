@@ -35,7 +35,8 @@ module GitHubChangelogGenerator
         {
           bug_labels: ["bug"],
           enhancement_labels: ["enhancement"],
-          breaking_labels: ["breaking"]
+          breaking_labels: ["breaking"],
+          removed_labels: ["removed"]
         }
       end
 
@@ -55,7 +56,8 @@ module GitHubChangelogGenerator
           pr("enhancement", ["enhancement"]),
           pr("bug", ["bug"]),
           pr("breaking", ["breaking"]),
-          pr("all the labels", %w[enhancement bug breaking])
+          pr("all the labels", %w[enhancement bug breaking]),
+          pr("shit", ["removed"])
         ]
       end
 
@@ -66,6 +68,7 @@ module GitHubChangelogGenerator
         expect(get_titles(sections[:enhancements])).to eq(["issue enhancement", "issue all the labels", "pr enhancement", "pr all the labels"])
         expect(get_titles(sections[:bugs])).to eq(["issue bug", "pr bug"])
         expect(get_titles(sections[:breaking])).to eq(["issue breaking", "pr breaking"])
+        expect(get_titles(sections[:removed])).to eq(["shit"])
         expect(get_titles(pull_requests)).to eq(["pr no labels"])
       end
     end
