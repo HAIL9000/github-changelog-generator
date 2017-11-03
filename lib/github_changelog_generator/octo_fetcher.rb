@@ -116,7 +116,6 @@ module GitHubChangelogGenerator
       print_empty_line
 
       Helper.log.warn "OCTO FETCHER LINE 119!!!!!!!!!!!!!!"
-      require 'pry'; binding.pry
       if tags.count == 0
         Helper.log.warn "Warning: Can't find any tags in repo. \
 Make sure, that you push tags to remote repo via 'git push --tags'"

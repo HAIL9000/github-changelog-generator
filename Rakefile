@@ -7,9 +7,15 @@ require "rspec/core/rake_task"
 require "pathname"
 require "fileutils"
 require "overcommit"
+require_relative 'lib/github_changelog_generator/task'
 
 RuboCop::RakeTask.new
 RSpec::Core::RakeTask.new
+
+GitHubChangelogGenerator::RakeTask.new :changelog do |config|
+  config.project            = 'beaker-i18n_helper'
+  config.user               = 'puppetlabs'
+end
 
 desc "When releasing the gem, re-fetch latest cacert.pem from curl.haxx.se. Developer task."
 task :update_ssl_ca_file do

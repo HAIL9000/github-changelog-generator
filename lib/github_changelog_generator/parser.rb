@@ -64,6 +64,12 @@ module GitHubChangelogGenerator
         opts.on("--issues-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
           options[:issue_prefix] = v
         end
+        opts.on("--dogs-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
+          options[:dogs_prefix] = v
+        end
+        opts.on("--cats-label [LABEL]", "Setup custom label for closed-issues section. Default is \"**Closed issues:**\"") do |v|
+          options[:cats_prefix] = v
+        end
         opts.on("--header-label [LABEL]", "Setup custom header label. Default is \"# Change Log\"") do |v|
           options[:header] = v
         end
@@ -123,6 +129,12 @@ module GitHubChangelogGenerator
         end
         opts.on("--enhancement-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
           options[:enhancement_labels] = list
+        end
+        opts.on("--cats-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
+          options[:cats_labels] = list
+        end
+        opts.on("--dogs-labels  x,y,z", Array, 'Issues with the specified labels will be always added to "Implemented enhancements" section. Default is \'enhancement,Enhancement\'') do |list|
+          options[:dogs_labels] = list
         end
         opts.on("--breaking-labels x,y,z", Array, 'Issues with these labels will be added to a new section, called "Breaking Changes". Default is \'backwards-incompatible\'') do |list|
           options[:breaking_labels] = list
@@ -208,6 +220,8 @@ module GitHubChangelogGenerator
         unreleased_label: "Unreleased",
         compare_link: true,
         enhancement_labels: ["enhancement", "Enhancement", "Type: Enhancement"],
+        dogs_labels: ['hambone', 'digby'],
+        cats_labels: ['unix', 'bigby', 'clementine'],
         bug_labels: ["bug", "Bug", "Type: Bug"],
         exclude_labels: ["duplicate", "question", "invalid", "wontfix", "Duplicate", "Question", "Invalid", "Wontfix", "Meta: Exclude From Changelog"],
         breaking_labels: %w[backwards-incompatible breaking],
@@ -222,6 +236,8 @@ module GitHubChangelogGenerator
         merge_prefix: "**Merged pull requests:**",
         issue_prefix: "**Closed issues:**",
         bug_prefix: "**Fixed bugs:**",
+        cats_prefix: "**FUCKIN CATS**",
+        dogs_prefix: "**HECKN DOGS**",
         enhancement_prefix: "**Implemented enhancements:**",
         breaking_prefix: "**Breaking changes:**",
         http_cache: true,

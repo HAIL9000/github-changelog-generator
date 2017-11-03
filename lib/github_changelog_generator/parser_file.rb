@@ -66,7 +66,7 @@ module GitHubChangelogGenerator
       [key.tr("-", "_").to_sym, value.gsub(/[\n\r]+/, "")]
     end
 
-    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels bug_labels
+    KNOWN_ARRAY_KEYS = %i[exclude_labels include_labels bug_labels cats_labels dogs_labels
                           enhancement_labels breaking_labels issue_line_labels between_tags exclude_tags]
     KNOWN_INTEGER_KEYS = [:max_issues]
 
@@ -88,6 +88,8 @@ module GitHubChangelogGenerator
       bugs_label: :bug_prefix,
       enhancement_label: :enhancement_prefix,
       issues_label: :issue_prefix,
+      cats_label: :cats_prefix,
+      dogs_label: :dogs_prefix,
       header_label: :header,
       front_matter: :frontmatter,
       pr_label: :merge_prefix,

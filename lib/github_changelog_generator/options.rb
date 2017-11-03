@@ -27,6 +27,10 @@ module GitHubChangelogGenerator
       due_tag
       enhancement_labels
       enhancement_prefix
+      dogs_labels
+      dogs_prefix
+      cats_labels
+      cats_prefix
       breaking_labels
       breaking_prefix
       configure_sections

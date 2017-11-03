@@ -25,7 +25,6 @@ module GitHubChangelogGenerator
     # Class, responsible for whole change log generation cycle
     # @return initialised instance of ChangelogGenerator
     def initialize
-      require 'pry'; binding.pry
       @options = Parser.parse_options
       @generator = Generator.new @options
     end

@@ -105,8 +105,8 @@ module GitHubChangelogGenerator
       log += generate_sub_section(sections[:enhancements], options[:enhancement_prefix])
       log += generate_sub_section(sections[:bugs], options[:bug_prefix])
       log += generate_sub_section(sections[:issues], options[:issue_prefix])
-      log += generate_sub_section('cats', 'cats')
-      log += generate_sub_section('dogs', 'dogs')
+      log += generate_sub_section(sections[:cats], options[:cats_prefix])
+      log += generate_sub_section(sections[:dogs], options[:dogs_prefix])
       log
     end
 
@@ -139,6 +139,12 @@ module GitHubChangelogGenerator
           elsif options[:breaking_labels].include?(label["name"])
             sections[:breaking] << dict
             added = true
+          elsif options[:cats_labels].include?(label["name"])
+            sections[:cats] << dict
+            added = true
+          elsif options[:dogs_labels].include?(label["name"])
+            sections[:dogs] << dict
+            added = true
           end
 
           break if added
@@ -155,10 +161,8 @@ module GitHubChangelogGenerator
     # @param [Hash] sections
     # @return [Hash] sections
     def sort_pull_requests(pull_requests, sections)
-      require 'pry'; binding.pry
+
       map = create_label_to_section_map
-      puts "HERE IS THE MAP HERE IT IS"
-      pp map
       added_pull_requests = []
       pull_requests.each do |pr|
         added = false
@@ -178,7 +182,6 @@ module GitHubChangelogGenerator
     end
 
     def create_label_to_section_map
-      require 'pry'; binding.pry
       #TODO: testing hack, take this out
       options[:configure_sections] = '{"cats": ["unix", "bigby", "clementine"], "dogs": ["hambone", "digby"]}'
 
